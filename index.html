@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pictura — Image Curator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="noise"></div>
+
+  <header>
+    <div class="logo">Pictura</div>
+    <div class="tagline">curate &amp; collect</div>
+  </header>
+
+  <main>
+    <!-- Stage: Current Image -->
+    <section class="stage" id="stage">
+      <div class="image-frame">
+        <div class="image-loader" id="imageLoader">
+          <div class="loader-ring"></div>
+        </div>
+        <img id="currentImage" src="" alt="Current image" style="display:none;" />
+        <div class="image-meta" id="imageMeta"></div>
+      </div>
+
+      <div class="assign-panel">
+        <p class="assign-label">Assign this image to an email address</p>
+        <div class="input-group">
+          <input
+            type="email"
+            id="emailInput"
+            placeholder="curator@example.com"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <div class="input-error" id="inputError"></div>
+        </div>
+        <button id="assignBtn" class="btn-primary" disabled>
+          <span class="btn-text">Assign &amp; Next</span>
+          <span class="btn-arrow">→</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Gallery: Assigned Images -->
+    <section class="gallery-section" id="gallerySection" style="display:none;">
+      <div class="gallery-header">
+        <h2>Collection</h2>
+        <span class="gallery-count" id="galleryCount"></span>
+      </div>
+      <div class="gallery-grid" id="galleryGrid"></div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

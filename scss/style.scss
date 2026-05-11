@@ -1,0 +1,448 @@
+//  Variables 
+$ink:    #0e0c0a;
+$paper:  #f5f0e8;
+$cream:  #ede7d9;
+$sand:   #c9bc9f;
+$copper: #b5723a;
+$rust:   #8b3a1e;
+$white:  #faf8f4;
+$shadow: rgba(14, 12, 10, 0.12);
+
+$font-display: 'Cormorant Garamond', Georgia, serif;
+$font-mono:    'DM Mono', 'Courier New', monospace;
+
+$bp-tablet: 700px;
+$bp-mobile: 420px;
+
+//  Mixins 
+@mixin mono-label($size: 10px, $spacing: 0.2em) {
+  font-family: $font-mono;
+  font-size: $size;
+  letter-spacing: $spacing;
+  text-transform: uppercase;
+}
+
+@mixin absolute-fill {
+  position: absolute;
+  inset: 0;
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+//  Animations 
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes flashBtn {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(0.97); }
+  100% { transform: scale(1); }
+}
+
+//  CSS Custom Properties 
+// Kept for runtime use (JS reads these via getComputedStyle if needed)
+:root {
+  --ink:    #{$ink};
+  --paper:  #{$paper};
+  --cream:  #{$cream};
+  --sand:   #{$sand};
+  --copper: #{$copper};
+  --rust:   #{$rust};
+
+  --font-display: #{$font-display};
+  --font-mono:    #{$font-mono};
+}
+
+//  Reset 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+//  Base 
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: $paper;
+  color: $ink;
+  font-family: $font-mono;
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+//  Noise Overlay 
+.noise {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 128px;
+}
+
+//  Header 
+header {
+  display: flex;
+  align-items: baseline;
+  gap: 1.2rem;
+  padding: 2rem 3rem 1.4rem;
+  border-bottom: 1px solid $sand;
+  position: sticky;
+  top: 0;
+  background: $paper;
+  z-index: 10;
+  backdrop-filter: blur(8px);
+
+  @media (max-width: $bp-tablet) {
+    padding: 1.2rem 1.2rem 1rem;
+  }
+}
+
+.logo {
+  font-family: $font-display;
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  color: $ink;
+}
+
+.tagline {
+  @include mono-label(10px, 0.25em);
+  color: $sand;
+  padding-bottom: 0.15em;
+}
+
+//  Main 
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 2rem 6rem;
+
+  @media (max-width: $bp-tablet) {
+    padding: 2rem 1.2rem 5rem;
+  }
+}
+
+//  Stage 
+.stage {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 3rem;
+  align-items: start;
+  padding-bottom: 3rem;
+  margin-bottom: 3rem;
+
+  @media (max-width: $bp-tablet) {
+    grid-template-columns: 1fr;
+    gap: 1.8rem;
+    padding-bottom: 2rem;
+    margin-bottom: 2rem;
+  }
+}
+
+//  Image Frame 
+.image-frame {
+  position: relative;
+  background: $cream;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border: 1px solid $sand;
+
+  &::before {
+    content: '';
+    @include absolute-fill;
+    background: linear-gradient(135deg, transparent 70%, rgba($ink, 0.04));
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  @media (max-width: $bp-tablet) {
+    aspect-ratio: 16 / 10;
+  }
+}
+
+.image-loader {
+  @include absolute-fill;
+  @include flex-center;
+  background: $cream;
+  z-index: 2;
+  transition: opacity 0.4s;
+
+  &.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+.loader-ring {
+  width: 32px;
+  height: 32px;
+  border: 1.5px solid $sand;
+  border-top-color: $copper;
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+#currentImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.5s ease, transform 0.6s ease;
+  opacity: 0;
+  transform: scale(1.02);
+
+  &.loaded {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.image-meta {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0.5rem 0.75rem;
+  background: rgba($ink, 0.45);
+  color: rgba($white, 0.7);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  backdrop-filter: blur(4px);
+  z-index: 2;
+}
+
+//  Assign Panel 
+.assign-panel {
+  padding-top: 0.5rem;
+
+  &.flash .btn-primary {
+    background: $copper;
+    animation: flashBtn 0.4s ease;
+  }
+}
+
+.assign-label {
+  font-family: $font-display;
+  font-size: 1.5rem;
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.3;
+  color: $ink;
+  margin-bottom: 1.8rem;
+}
+
+//  Input Group 
+.input-group {
+  margin-bottom: 1.2rem;
+}
+
+#emailInput {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1.5px solid $sand;
+  padding: 0.65rem 0;
+  font-family: $font-mono;
+  font-size: 13px;
+  font-weight: 300;
+  color: $ink;
+  outline: none;
+  transition: border-color 0.25s;
+  letter-spacing: 0.03em;
+
+  &::placeholder {
+    color: $sand;
+  }
+
+  &:focus {
+    border-bottom-color: $copper;
+  }
+
+  &.error {
+    border-bottom-color: $rust;
+  }
+}
+
+.input-error {
+  @include mono-label(10px, 0.12em);
+  color: $rust;
+  min-height: 1.2em;
+  margin-top: 0.35rem;
+  transition: opacity 0.2s;
+}
+
+//  Button 
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.6rem;
+  background: $ink;
+  color: $paper;
+  border: none;
+  font-family: $font-mono;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  margin-top: 0.4rem;
+
+  &:hover:not(:disabled) {
+    background: $copper;
+    transform: translateX(2px);
+
+    .btn-arrow {
+      transform: translateX(4px);
+    }
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+}
+
+.btn-arrow {
+  font-size: 14px;
+  transition: transform 0.2s;
+}
+
+//  Gallery Section 
+.gallery-section {
+  animation: fadeUp 0.5s ease both;
+}
+
+.gallery-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid $cream;
+
+  h2 {
+    font-family: $font-display;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 300;
+    letter-spacing: 0.04em;
+  }
+}
+
+.gallery-count {
+  @include mono-label(10px, 0.2em);
+  color: $sand;
+}
+
+//  Gallery Grid 
+.gallery-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 3.5rem;
+}
+
+//  Email Group 
+.email-group {
+  animation: fadeUp 0.4s ease both;
+}
+
+.email-group-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
+
+.email-address {
+  font-family: $font-mono;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: $copper;
+  font-weight: 400;
+  word-break: break-all;
+}
+
+.email-count-badge {
+  @include mono-label(9px, 0.15em);
+  background: $cream;
+  border: 1px solid $sand;
+  padding: 0.15rem 0.5rem;
+  color: $sand;
+  flex-shrink: 0;
+}
+
+//  Email Images Grid 
+.email-images {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.75rem;
+
+  @media (max-width: $bp-tablet) {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+
+  @media (max-width: $bp-mobile) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+//  Gallery Thumbnail 
+.gallery-thumb {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: $cream;
+  border: 1px solid transparent;
+  transition: border-color 0.2s, transform 0.2s;
+  cursor: default;
+
+  &:hover {
+    border-color: $sand;
+    transform: translateY(-2px);
+
+    img {
+      transform: scale(1.04);
+    }
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+}
+
+.thumb-index {
+  position: absolute;
+  top: 0.4rem;
+  left: 0.4rem;
+  background: rgba($ink, 0.55);
+  color: rgba($white, 0.75);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  padding: 0.2rem 0.4rem;
+  backdrop-filter: blur(3px);
+}
