@@ -1,7 +1,4 @@
-/* ─── Pictura — app.js ─────────────────────────────────
-   Loads random images from picsum.photos and lets users
-   assign them to email addresses. All state is in-memory.
-─────────────────────────────────────────────────────── */
+
 
 (function () {
   "use strict";
@@ -21,8 +18,7 @@
   const assignPanel    = document.querySelector(".assign-panel");
 
   // ── Email validation ──────────────────────────────────
-  // Each check returns a specific message so the user knows
-  // exactly what needs fixing.
+ 
   function validateEmail(val) {
     if (!val || val.trim() === "")
       return "An email address is required";
