@@ -131,7 +131,7 @@
     var total = 0;
     assignments.forEach(function (imgs) { total += imgs.length; });
     galleryCount.textContent = total + " image" + (total !== 1 ? "s" : "") +
-      " · " + assignments.size + " curator" + (assignments.size !== 1 ? "s" : "");
+      " · " + assignments.size + " email" + (assignments.size !== 1 ? "s" : "");
   }
 
   function addToGallery(email, imgData) {
