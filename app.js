@@ -17,7 +17,7 @@
   const galleryCount   = document.getElementById("galleryCount");
   const assignPanel    = document.querySelector(".assign-panel");
 
-  // ── Email validation ──────────────────────────────────
+  //  Email validation 
  
   function validateEmail(val) {
     if (!val || val.trim() === "")
@@ -54,7 +54,7 @@
     return null;
   }
 
-  // ── Load image ────────────────────────────────────────
+  //  Load image 
   function loadImage() {
     const id  = Math.floor(Math.random() * 1000) + 1;
     const src = "https://picsum.photos/id/" + id + "/900/600";
@@ -86,7 +86,7 @@
     tempImg.src = src;
   }
 
-  // ── Assign ────────────────────────────────────────────
+  //  Assign 
   function assign() {
     const email = emailInput.value.trim().toLowerCase();
     const err   = validateEmail(email);
@@ -112,7 +112,7 @@
     loadImage();
   }
 
-  // ── Gallery ───────────────────────────────────────────
+  //  Gallery 
   function createThumb(imgData, idx) {
     var thumb = document.createElement("div"); thumb.className = "gallery-thumb";
     var lbl   = document.createElement("div"); lbl.className = "thumb-index";
@@ -162,7 +162,7 @@
     }
   }
 
-  // ── Events ────────────────────────────────────────────
+  //  Events 
   emailInput.addEventListener("input", function () {
     var val = this.value.trim();
     var err = validateEmail(val);
