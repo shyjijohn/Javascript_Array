@@ -12,6 +12,7 @@
   const emailInput     = document.getElementById("emailInput");
   const inputError     = document.getElementById("inputError");
   const assignBtn      = document.getElementById("assignBtn");
+  const nextBtn        = document.getElementById("nextBtn");
   const gallerySection = document.getElementById("gallerySection");
   const galleryGrid    = document.getElementById("galleryGrid");
   const galleryCount   = document.getElementById("galleryCount");
@@ -64,6 +65,7 @@
     loader.classList.remove("hidden");
     imageMeta.textContent = "";
     assignBtn.disabled = true;
+    nextBtn.disabled = true;
 
     const tempImg = new Image();
     tempImg.crossOrigin = "anonymous";
@@ -78,6 +80,7 @@
           loader.classList.add("hidden");
           imageMeta.textContent = "Photo #" + id + " · picsum.photos";
           assignBtn.disabled = !!validateEmail(emailInput.value.trim());
+          nextBtn.disabled = false;
         });
       });
     };
@@ -109,7 +112,6 @@
     setTimeout(function () { assignPanel.classList.remove("flash"); }, 500);
 
     addToGallery(email, imgData);
-    loadImage();
   }
 
   //  Gallery 
@@ -181,6 +183,7 @@
   });
 
   assignBtn.addEventListener("click", assign);
+  nextBtn.addEventListener("click", loadImage);
 
   loadImage();
 })();
