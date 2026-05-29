@@ -12,12 +12,13 @@
   <div class="noise"></div>
 
   <header>
-    <div class="logo">Pictures</div>
+    <h1 class="logo">Pictures</h1>
   </header>
 
   <main>
     <!-- Stage: Current Image -->
-    <section class="stage" id="stage">
+    <div class="stage" id="stage">
+
       <div class="image-frame">
         <div class="image-loader" id="imageLoader">
           <div class="loader-ring"></div>
@@ -48,16 +49,16 @@
           </button>
         </div>
       </div>
-    </section>
+    </div>
 
     <!-- Gallery: Assigned Images -->
-    <section class="gallery-section" id="gallerySection" style="display:none;">
+    <div class="gallery-section" id="gallerySection" style="display:none;">
       <div class="gallery-header">
         <h2>Collection</h2>
         <span class="gallery-count" id="galleryCount"></span>
       </div>
       <div class="gallery-grid" id="galleryGrid"></div>
-    </section>
+    </div>
   </main>
 
   <script src="app.js"></script>
