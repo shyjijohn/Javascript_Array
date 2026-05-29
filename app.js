@@ -105,6 +105,13 @@
     emailInput.classList.remove("error");
 
     if (!assignments.has(email)) assignments.set(email, []);
+    var already = assignments.get(email).some(function (img) { return img.id === currentImage.id; });
+    if (already) {
+      inputError.textContent = "This image is already assigned to this email";
+      emailInput.classList.add("error");
+      return;
+    }
+
     var imgData = { src: currentImage.src, id: currentImage.id };
     assignments.get(email).push(imgData);
 
